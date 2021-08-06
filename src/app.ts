@@ -4,8 +4,10 @@ import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 
-import './database';
 // import  createConnection  from "./database/index"
+import createDbConnection from './database';
+
+createDbConnection();
 
 import './shared/container';
 import { router } from './routes';
