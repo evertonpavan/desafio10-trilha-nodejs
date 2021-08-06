@@ -7,8 +7,4 @@ const createUserController = new CreateUserController();
 
 usersRouter.post('/', createUserController.execute);
 
-usersRouter.get('/', (req, res) => {
-    return res.json("api")
-  })
-
 export { usersRouter };
