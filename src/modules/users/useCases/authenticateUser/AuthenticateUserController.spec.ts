@@ -1,4 +1,6 @@
 import request from "supertest";
+import { v4 as uuidV4 } from "uuid";
+import { hash } from "bcryptjs";
 import { Connection } from "typeorm";
 import createConnection from "../../../../database";
 
@@ -10,6 +12,15 @@ describe("Authenticate User Controller", () => {
     beforeAll(async () => {
         connection = await createConnection();
         await connection.runMigrations();
+
+        const id = uuidV4();
+        const passsword = await hash('thebest', 8);
+
+        await connection.query(
+            `INSERT INTO users (id, name, email, password, created_at, updated_at)
+            VALUES ('${id}', 'Lionel Messi', 'messi@messi.com', '${passsword}', now(), now())`
+        );
+
     });
 
     afterAll(async () => {
@@ -18,14 +29,6 @@ describe("Authenticate User Controller", () => {
     });
 
     it("should be able to authenticate", async () => {
-
-        await request(app)
-            .post("/api/v1/users")
-            .send({
-                name: "Lionel Messi",
-                email: "messi@messi.com",
-                password: "thebest"
-            })
 
         const response = await request(app)
             .post("/api/v1/sessions")
@@ -48,7 +51,7 @@ describe("Authenticate User Controller", () => {
             .post("/api/v1/sessions")
             .send({
                 email: "neymar@jr.com",
-                password: "999999"
+                password: "brazil"
             })
 
         expect(response.status).toBe(401);

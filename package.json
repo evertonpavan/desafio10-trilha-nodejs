@@ -6,9 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --poll --transpile-only --ignore-watch node_modules --respawn ./src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli",
-    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
-    "prod": "jest --runInBand --detectOpenHandles"
-
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

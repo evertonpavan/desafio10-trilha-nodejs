@@ -46,8 +46,8 @@ describe("Get Statement Operation Controller", () => {
             .set({
                 Authorization: `Bearer ${token}`,
             });
-
-        const { id } = statementResponse.body;
+        
+        const { id, user_id, amount, description, type, created_at, updated_at} = statementResponse.body;
 
         const response = await request(app)
             .get(`/api/v1/statements/${id}`)
@@ -55,18 +55,17 @@ describe("Get Statement Operation Controller", () => {
                 Authorization: `Bearer ${token}`,
             });
 
-
         expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty("id");
-        expect(response.body).toHaveProperty("user_id");
-        expect(response.body).toHaveProperty("amount", "400.00");
-        expect(response.body).toHaveProperty("description", "income");
-        expect(response.body).toHaveProperty("type", "deposit");
-        expect(response.body).toHaveProperty("created_at");
-        expect(response.body).toHaveProperty("updated_at");
+        expect(response.body).toHaveProperty("id", id);
+        expect(response.body).toHaveProperty("user_id", user_id);
+        expect(response.body).toHaveProperty("amount", amount.toFixed(2));
+        expect(response.body).toHaveProperty("description", description);
+        expect(response.body).toHaveProperty("type", type);
+        expect(response.body).toHaveProperty("created_at", created_at);
+        expect(response.body).toHaveProperty("updated_at", updated_at);
     })
 
-   it("should not be able to get a nonexistent statement operation", async () => {
+    it("should not be able to get a nonexistent statement operation", async () => {
 
         const authResponse = await request(app)
             .post("/api/v1/sessions")
@@ -99,7 +98,6 @@ describe("Get Statement Operation Controller", () => {
 
         const { token, user } = authResponse.body;
 
-
         const statementResponse = await request(app)
             .post("/api/v1/statements/deposit")
             .send({
@@ -122,8 +120,4 @@ describe("Get Statement Operation Controller", () => {
 
         expect(response.status).toBe(404);
     })
-
-
-
-
 });

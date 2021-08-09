@@ -34,7 +34,7 @@ describe("Show User Profile Controller", () => {
                 password: "thebest"
             })
 
-        const token = user.body.token;
+        const { token } = user.body;
 
         const response = await request(app)
             .get("/api/v1/profile")
@@ -52,7 +52,24 @@ describe("Show User Profile Controller", () => {
 
     it("should not be able to show a nonexistent user profile", async () => {
 
-        const token = '123456789'
+        await request(app)
+            .post("/api/v1/users")
+            .send({
+                name: "Neymar Jr",
+                email: "neymar@jr.com",
+                password: "brazil"
+            })
+
+        const authResponse = await request(app)
+            .post("/api/v1/sessions")
+            .send({
+                email: "neymar@jr.com",
+                password: "brazil"
+            })
+
+        const { token, user } = authResponse.body;
+
+        await connection.query(`DELETE FROM users WHERE id = '${user.id}'`);
 
         const response = await request(app)
             .get("/api/v1/profile")
@@ -60,7 +77,7 @@ describe("Show User Profile Controller", () => {
                 Authorization: `Bearer ${token}`,
             });
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(404);
     });
 
 

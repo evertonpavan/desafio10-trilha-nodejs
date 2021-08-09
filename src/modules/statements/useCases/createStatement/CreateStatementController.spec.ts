@@ -1,4 +1,6 @@
 import request from "supertest";
+import { v4 as uuidV4 } from "uuid";
+import { hash } from "bcryptjs";
 import { Connection } from "typeorm";
 import createConnection from "../../../../database";
 
@@ -10,6 +12,14 @@ describe("Create Statement Controller", () => {
     beforeAll(async () => {
         connection = await createConnection();
         await connection.runMigrations();
+
+        const id = uuidV4();
+        const passsword = await hash('thebest', 8);
+
+        await connection.query(
+            `INSERT INTO users (id, name, email, password, created_at, updated_at)
+            VALUES ('${id}', 'Lionel Messi', 'messi@messi.com', '${passsword}', now(), now())`
+        );
     });
 
     afterAll(async () => {
@@ -19,14 +29,6 @@ describe("Create Statement Controller", () => {
 
     it("should be able to create a deposit", async () => {
 
-        await request(app)
-            .post("/api/v1/users")
-            .send({
-                name: "Lionel Messi",
-                email: "messi@messi.com",
-                password: "thebest"
-            })
-
         const user = await request(app)
             .post("/api/v1/sessions")
             .send({
@@ -34,7 +36,7 @@ describe("Create Statement Controller", () => {
                 password: "thebest"
             })
 
-        const token = user.body.token;
+        const { token } = user.body;
 
         const response = await request(app)
             .post("/api/v1/statements/deposit")
@@ -57,14 +59,6 @@ describe("Create Statement Controller", () => {
     })
 
     it("should be able to create a withdraw", async () => {
-
-        await request(app)
-            .post("/api/v1/users")
-            .send({
-                name: "Lionel Messi",
-                email: "messi@messi.com",
-                password: "thebest"
-            })
 
         const user = await request(app)
             .post("/api/v1/sessions")
@@ -97,14 +91,6 @@ describe("Create Statement Controller", () => {
 
     it("should not be able to create a withdraw with insufficient funds", async () => {
 
-        await request(app)
-            .post("/api/v1/users")
-            .send({
-                name: "Lionel Messi",
-                email: "messi@messi.com",
-                password: "thebest"
-            })
-
         const user = await request(app)
             .post("/api/v1/sessions")
             .send({
@@ -126,5 +112,32 @@ describe("Create Statement Controller", () => {
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Insufficient funds");
+    })
+
+    it("should not be able to create statement from nonexistent user", async () => {
+
+        const authResponse = await request(app)
+            .post("/api/v1/sessions")
+            .send({
+                email: "messi@messi.com",
+                password: "thebest"
+            })
+
+        const { token, user } = authResponse.body;
+
+        await connection.query(`DELETE FROM users WHERE id = '${user.id}'`);
+
+        const response = await request(app)
+            .post("/api/v1/statements/deposit")
+            .send({
+                amount: 400,
+                description: 'income',
+            })
+            .set({
+                Authorization: `Bearer ${token}`,
+            });
+
+        expect(response.status).toBe(404);
+
     })
 });
