@@ -18,8 +18,6 @@ export class CreateStatementUseCase {
   async execute({ user_id, type, amount, description }: ICreateStatementDTO) {
     const user = await this.usersRepository.findById(user_id);
 
-    console.log('entrou no usecase')
-
     if(!user) {
       throw new CreateStatementError.UserNotFound();
     }
@@ -39,7 +37,6 @@ export class CreateStatementUseCase {
       description
     });
 
-    console.log('saindo')
     return statementOperation;
   }
 }

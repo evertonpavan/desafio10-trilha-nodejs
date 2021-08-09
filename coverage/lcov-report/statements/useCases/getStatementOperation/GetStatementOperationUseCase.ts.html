@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">95% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/20</span>
+                <span class='fraction'>19/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.71% </span>
+                <span class="strong">92.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/14</span>
+                <span class='fraction'>13/14</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -110,27 +110,27 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { inject, injectable } from "tsyringe";
@@ -146,29 +146,29 @@ interface IRequest {
 &nbsp;
 @injectable()
 export class GetStatementOperationUseCase {
-<span class="fstat-no" title="function not covered" >  constructor(</span>
+  constructor(
     @inject('UsersRepository')
-    private <span class="cstat-no" title="statement not covered" >usersRepository: IUsersRepository,</span>
+    private usersRepository: IUsersRepository,
 &nbsp;
     @inject('StatementsRepository')
-    private <span class="cstat-no" title="statement not covered" >statementsRepository: IStatementsRepository</span>
+    private statementsRepository: IStatementsRepository
   ) {}
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async e</span>xecute({ user_id<span class="cstat-no" title="statement not covered" >, s</span>tatement_id<span class="cstat-no" title="statement not covered" > }: IRequest)</span> {
-    const <span class="cstat-no" title="statement not covered" >user = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await this.usersRepository.findById(user_id);</span></span></span>
+  async execute({ user_id, statement_id }: IRequest) {
+    const user = await this.usersRepository.findById(user_id);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if(!user) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(!user) {
 <span class="cstat-no" title="statement not covered" >      throw new GetStatementOperationError.UserNotFound();</span>
     }
 &nbsp;
-    const <span class="cstat-no" title="statement not covered" >statementOperation = <span class="cstat-no" title="statement not covered" >await this.statementsRepository</span></span>
+    const statementOperation = await this.statementsRepository
       .findStatementOperation({ user_id, statement_id });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if(!statementOperation) {</span>
-<span class="cstat-no" title="statement not covered" >        throw new GetStatementOperationError.StatementNotFound();</span>
+      if(!statementOperation) {
+        throw new GetStatementOperationError.StatementNotFound();
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return statementOperation;</span>
+      return statementOperation;
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -178,7 +178,7 @@ export class GetStatementOperationUseCase {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 09 2021 11:23:11 GMT-0300 (Horário Padrão de Brasília)
+                at Mon Aug 09 2021 15:31:51 GMT-0300 (Horário Padrão de Brasília)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
